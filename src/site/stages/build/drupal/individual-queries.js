@@ -83,7 +83,21 @@ const {
   GetCampaignLandingPages,
 } = require('./graphql/nodeCampaignLandingPage.graphql');
 
+const { GetPolicyPages } = require('./graphql/vamcPoliciesPage.graphql');
+
 function getNodeQueries(entityCounts) {
+  // Get current feature flags
+  const { cmsFeatureFlags } = global;
+
+  const featureQueries = {};
+
+  // NOTE: this flag is not yet available in prod CMS
+  if (cmsFeatureFlags.FEATURE_VAMC_SYSTEM_POLICIES_PAGE) {
+    // eslint-disable-next-line no-console
+    console.log('adding policy page query');
+    featureQueries.GetPolicyPages = GetPolicyPages;
+  }
+
   return {
     ...getNodePageQueries(entityCounts),
     GetNodeLandingPages,
@@ -113,6 +127,7 @@ function getNodeQueries(entityCounts) {
     GetNodeSupportResourcesDetailPage,
     GetNodeBasicLandingPage,
     GetCampaignLandingPages,
+    ...featureQueries,
   };
 }
 

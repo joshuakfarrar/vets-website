@@ -28,6 +28,7 @@ const sidebarQuery = require('./navigation-fragments/sidebar.nav.graphql');
 const taxonomiesQuery = require('./taxonomy-fragments/GetTaxonomies.graphql');
 const vaFormPage = require('./vaFormPage.graphql');
 const vamcOperatingStatusAndAlerts = require('./vamcOperatingStatusAndAlerts.graphql');
+const vamcPolicyPages = require('./vamcPoliciesPage.graphql');
 
 // Get current feature flags
 const { cmsFeatureFlags } = global;
@@ -107,6 +108,11 @@ module.exports = `
     }
     ${menuLinksQuery.partialQuery}
     ${taxonomiesQuery.partialQuery}
+    ${
+      cmsFeatureFlags.FEATURE_VAMC_SYSTEM_POLICIES_PAGE
+        ? `${vamcPolicyPages}`
+        : ''
+    }    
   }
 `;
 
